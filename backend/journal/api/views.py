@@ -1,44 +1,33 @@
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-
+from rest_framework import permissions
+from rest_framework_jwt.settings import api_settings
 from . import serializers
 from . import models
 
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
-class AuthRegister(APIView):
+class AuthRegister(generics.CreateAPIView):
     """
     Register a new user.
     """
+    model = models.Account.objects.all()
     serializer_class = serializers.AccountSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (permissions.AllowAny,)
 
-    def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AuthLogin(APIView):
-    ''' Manual implementation of login method '''
-    def post(self, request, format=None):
-        data = request.data
-        email = data.get('email', None)
-        password = data.get('password', None)
-
-        account = authenticate(email=email, password=password)
-        # Generate token and add it to the response object
-        if account is not None:
-            login(request, account)
-            return Response({
-                'status': 'Successful',
-                'message': 'You have successfully been logged into your account.'
-            }, status=status.HTTP_200_OK)
-
-        return Response({
-            'status': 'Unauthorized',
-            'message': 'Username/password combination invalid.'
-        }, status=status.HTTP_401_UNAUTHORIZED)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        user = self.model.get(username=serializer.data['username'])
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
+        return Response(
+            {
+            'token': token
+            },
+            status=status.HTTP_201_CREATED, headers=headers
+        )
