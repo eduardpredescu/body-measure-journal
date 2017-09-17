@@ -41,7 +41,6 @@ class Account(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
-
 class Measurement(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     weight = models.IntegerField()

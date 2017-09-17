@@ -1,9 +1,10 @@
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework import permissions, authentication
 from .permissions import UserPermission, IsOwner
 from rest_framework_jwt.settings import api_settings
+from django.contrib.auth import login
 from . import serializers
 from . import models
 
@@ -36,19 +37,21 @@ class AuthRegister(generics.CreateAPIView):
 
 
 class UserList(generics.ListAPIView):
-    permission_classes = (UserPermission,)
+    permission_classes = (permissions.IsAuthenticated, UserPermission,)
     queryset = models.Account.objects.all()
     serializer_class = serializers.AccountSerializer
 
 
 
 class MeasurementList(generics.ListAPIView):
-    permission_classes = (IsOwner,)
-    queryset = models.Measurement.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+    def get_queryset(self):
+        user = self.request.user
+        return models.Measurement.objects.filter(owner=user)
     serializer_class = serializers.MeasurementSerializer
 
 
 class MeasurementDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsOwner,)
+    permission_classes = (permissions.IsAuthenticated, IsOwner,)
     serializer_class = serializers.MeasurementSerializer
     queryset = models.Measurement.objects.all()

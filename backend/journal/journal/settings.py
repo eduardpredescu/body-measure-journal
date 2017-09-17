@@ -25,7 +25,9 @@ SECRET_KEY = 's9fs377qg92wvdgiv1kh2y70=12$r&7!hnrgn-o^tsiws2v7jc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -40,9 +42,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'autofixture',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -130,9 +134,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
 }
 
