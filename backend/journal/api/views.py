@@ -2,12 +2,14 @@ from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import permissions
+from .permissions import UserPermission
 from rest_framework_jwt.settings import api_settings
 from . import serializers
 from . import models
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
 
 class AuthRegister(generics.CreateAPIView):
     """
@@ -31,3 +33,9 @@ class AuthRegister(generics.CreateAPIView):
             },
             status=status.HTTP_201_CREATED, headers=headers
         )
+
+
+class UserList(generics.ListAPIView):
+    permission_classes = (UserPermission,)
+    queryset = models.Account.objects.all()
+    serializer_class = serializers.AccountSerializer

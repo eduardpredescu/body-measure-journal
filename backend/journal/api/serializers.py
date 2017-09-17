@@ -12,7 +12,7 @@ class AccountSerializer(serializers.ModelSerializer):
   confirm_password = serializers.CharField(write_only=True, required=True)
   class Meta:
     model = models.Account
-    fields = ('email', 'password', 'confirm_password', 'username',)
+    fields = ('email', 'password', 'confirm_password', 'username', 'is_admin',)
 
   def create(self, validated_data):
     return models.Account.objects.create_user(**validated_data)

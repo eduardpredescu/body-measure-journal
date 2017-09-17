@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^login/', obtain_jwt_token),
     url(r'^logout/', logout),
     url(r'^token-refresh/', refresh_jwt_token),
+    url(r'^users/', views.UserList.as_view()),
     url(r'^register/$', views.AuthRegister.as_view()),
 ]
