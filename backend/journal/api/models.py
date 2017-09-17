@@ -40,3 +40,16 @@ class Account(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+
+class Measurement(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    weight = models.IntegerField()
+    height = models.IntegerField()
+    waist_m = models.IntegerField()
+    hip_m = models.IntegerField()
+    bust_m = models.IntegerField()
+    owner = models.ForeignKey('Account',on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}".format(self.date)

@@ -1,10 +1,11 @@
 from rest_framework import serializers
 from . import models
 
-# class MeasurementSerializer(serializers.ModelSerializer):
-#   class Meta:
-#     model = models.Measurement
-#     field = ('date', 'weight', 'height', 'weight', 'waist_m', 'bust_m', 'thigh_m',)
+class MeasurementSerializer(serializers.ModelSerializer):
+  owner = serializers.ReadOnlyField(source='owner.username')
+  class Meta:
+    model = models.Measurement
+    fields = ('date', 'weight', 'height', 'weight', 'waist_m', 'bust_m', 'owner',)
 
 
 class AccountSerializer(serializers.ModelSerializer):
