@@ -1,12 +1,9 @@
-from rest_framework import status
-from rest_framework import generics
+from rest_framework import status, generics, permissions
 from rest_framework.response import Response
-from rest_framework import permissions, authentication
-from .permissions import UserPermission, IsOwner
 from rest_framework_jwt.settings import api_settings
-from django.contrib.auth import login
 from . import serializers
 from . import models
+from .permissions import UserPermission, IsOwner
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
