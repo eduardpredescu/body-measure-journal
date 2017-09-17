@@ -17,16 +17,33 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
+    {{measurements}}
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      measurements: []
     }
+  },
+  created () {
+    axios.get(`http://localhost:8000/api/measurements/`, {
+      'headers': {
+        'Authorization': 'JWT ' + localStorage.getItem('JWTToken')
+      }
+    })
+    .then(response => {
+      // JSON responses are automatically parsed.
+      this.measurements = response.data
+    })
+    .catch(e => {
+      console.log(e)
+    })
   }
 }
 </script>
