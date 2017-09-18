@@ -44,7 +44,7 @@ class MeasurementList(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     def get_queryset(self):
         user = self.request.user
-        return models.Measurement.objects.filter(owner=user)
+        return models.Measurement.objects.filter(owner=user).values()
     serializer_class = serializers.MeasurementSerializer
 
 

@@ -5,7 +5,7 @@ class MeasurementSerializer(serializers.ModelSerializer):
   owner = serializers.ReadOnlyField(source='owner.username')
   class Meta:
     model = models.Measurement
-    fields = ('date', 'weight', 'height', 'weight', 'waist_m', 'bust_m', 'owner',)
+    fields = ('id', 'date', 'weight', 'height', 'weight', 'waist_m', 'bust_m', 'owner',)
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class AccountSerializer(serializers.ModelSerializer):
   confirm_password = serializers.CharField(write_only=True, required=True)
   class Meta:
     model = models.Account
-    fields = ('email', 'password', 'confirm_password', 'username', 'is_admin',)
+    fields = ('id', 'email', 'password', 'confirm_password', 'username', 'is_admin',)
 
   def create(self, validated_data):
     return models.Account.objects.create_user(**validated_data)
