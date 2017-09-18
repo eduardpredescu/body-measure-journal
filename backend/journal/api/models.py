@@ -38,8 +38,8 @@ class Account(AbstractBaseUser):
 
     objects = AccountManager()
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
 class Measurement(models.Model):
     date = models.DateTimeField(auto_now_add=True)
