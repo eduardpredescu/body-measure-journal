@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import Vuex from 'vuex'
 export default {
   name: 'AuthForm',
   data () {
@@ -16,17 +16,12 @@ export default {
       password: ''
     }
   },
+  computed: {
+    ...Vuex.mapGetters(['user'])
+  },
   methods: {
     Login () {
-      axios.post('http://localhost:8000/api/login/', {
-        'email': this.username,
-        'password': this.password
-      })
-      .then(response => {
-        console.log(response.data)
-        localStorage.setItem('JWTToken', response.data.token)
-      })
-      .catch(e => console.log(e.data))
+      this.$store.dispatch('Login', {'email': this.username, 'password': this.password})
     }
   }
 }
