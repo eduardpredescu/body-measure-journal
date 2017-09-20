@@ -33,14 +33,14 @@ class AuthRegister(generics.CreateAPIView):
         )
 
 
-class UserList(generics.ListAPIView):
+class UserList(generics.CreateListAPIView):
     permission_classes = (permissions.IsAuthenticated, UserPermission,)
     queryset = models.Account.objects.all()
     serializer_class = serializers.AccountSerializer
 
 
 
-class MeasurementList(generics.ListAPIView):
+class MeasurementList(generics.CreateListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     def get_queryset(self):
         user = self.request.user
