@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 from . import serializers
 from . import models
-from .permissions import UserPermission, IsOwner
+from .permissions import UserPermission, IsOwner, AdminPermission
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -33,14 +33,18 @@ class AuthRegister(generics.CreateAPIView):
         )
 
 
-class UserList(generics.CreateListAPIView):
+class UserList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated, UserPermission,)
     queryset = models.Account.objects.all()
     serializer_class = serializers.AccountSerializer
 
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,
+                          AdminPermission,)
+    serializer_class = serializers.AccountSerializer
+    queryset = models.Account.objects.all()
 
-
-class MeasurementList(generics.CreateListAPIView):
+class MeasurementList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     def get_queryset(self):
         user = self.request.user

@@ -69,6 +69,7 @@ export const store = new Vuex.Store({
     user: state => state.user,
     measurements: state => state.measurements,
     users: state => state.users,
-    isLoggedIn: state => state.isLoggedIn
+    isLoggedIn: state => state.isLoggedIn,
+    route: state => state.route
   }
 })

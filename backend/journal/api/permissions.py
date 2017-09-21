@@ -8,3 +8,7 @@ class UserPermission(permissions.BasePermission):
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
+
+class AdminPermission(permissions.BasePermission):
+  def has_object_permission(self, request, view, obj):
+    return obj.id == request.user.id or request.user.is_admin

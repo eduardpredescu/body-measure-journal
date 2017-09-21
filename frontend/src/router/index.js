@@ -10,12 +10,14 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: AuthForm
+      component: AuthForm,
+      meta: {requiresAnon: true}
     },
     {
       path: '/',
       name: 'Hello',
-      component: Hello
+      component: Hello,
+      meta: {requiresAuth: true}
     }
   ]
 })
