@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import Dashboard from '@/components/Dashboard'
 import AuthForm from '@/components/AuthForm'
+import RegisterForm from '@/components/Register'
 
 Vue.use(Router)
 
@@ -14,9 +15,15 @@ export default new Router({
       meta: {requiresAnon: true}
     },
     {
+      path: '/register',
+      name: 'Register',
+      component: RegisterForm,
+      meta: {requiresAnon: true}
+    },
+    {
       path: '/',
-      name: 'Hello',
-      component: Hello,
+      name: 'Dashboard',
+      component: Dashboard,
       meta: {requiresAuth: true}
     }
   ]

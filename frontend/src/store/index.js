@@ -10,7 +10,8 @@ export const store = new Vuex.Store({
     user: null,
     measurements: null,
     users: null,
-    isLoggedIn: !!localStorage.getItem('token')
+    isLoggedIn: !!localStorage.getItem('token'),
+    error: {}
   },
   mutations: {
     ADD_MEASUREMENT (state, measurement) {
@@ -26,6 +27,12 @@ export const store = new Vuex.Store({
     },
     SET_USER (state, token) {
       state.user = decode(token)
+    },
+    SET_ERROR (state, error) {
+      state.error = error
+    },
+    CLEAR_ERROR (state) {
+      state.error = {}
     },
     LOGIN (state) {
       state.pending = true
@@ -52,24 +59,40 @@ export const store = new Vuex.Store({
   actions: {
     Login ({commit}, user) {
       commit('LOGIN')
+      commit('CLEAR_ERROR')
       // TODO add env vars
-      axios.post('http://localhost:8000/api/login/', user)
+      return axios.post('http://localhost:8000/api/login/', user)
           .then(response => {
             localStorage.setItem('token', response.data.token)
             commit('SET_USER', response.data.token)
             commit('LOGIN_SUCCESS')
+          }).catch(error => {
+            console.log(error.response.data)
+            commit('SET_ERROR', error.response.data)
           })
     },
     Logout ({commit}) {
       localStorage.removeItem('token')
       commit('LOGOUT')
+    },
+    Register ({commit}, user) {
+      return axios.post('http://localhost:8000/api/register/', user)
+          .then(response => {
+            localStorage.setItem('token', response.data.token)
+            commit('SET_USER', response.data.token)
+            commit('LOGIN_SUCCESS')
+          }).catch(error => {
+            console.log(error.response.data)
+            commit('SET_ERROR', error.response.data)
+          })
     }
   },
   getters: {
-    user: state => state.user,
+    user: state => localStorage.getItem('token') ? decode(localStorage.getItem('token')) : state.user,
     measurements: state => state.measurements,
     users: state => state.users,
     isLoggedIn: state => state.isLoggedIn,
-    route: state => state.route
+    route: state => state.route,
+    error: state => state.error
   }
 })

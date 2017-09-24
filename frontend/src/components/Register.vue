@@ -4,9 +4,12 @@
       <v-card>
         <v-card-text>
           <v-form v-model="valid">
-            <v-alert v-if="error.non_field_errors" error value="true">
-              {{ error.non_field_errors[0] }}
-            </v-alert>
+            <v-text-field
+            label="Username"
+            v-model="username"
+            :rules="usernameRules"
+            required
+            ></v-text-field>
             <v-text-field
             label="E-mail"
             v-model="email"
@@ -22,10 +25,19 @@
             :type="e1 ? 'password' : 'text'"
             required
             counter></v-text-field>
-            <v-btn primary @click="Login" :disabled="!valid" >Login</v-btn>
+            <v-text-field
+            label="Enter your password again"
+            v-model="confirmPassword"
+            :rules="confirmPasswordRules"
+            :append-icon-cb= "() => (e1 = !e1)"
+            :append-icon="e1 ? 'visibility_off' : 'visibility'"
+            :type="e1 ? 'password' : 'text'"
+            required
+            counter></v-text-field>
+            <v-btn primary @click="Register" :disabled="!valid" >Register</v-btn>
           </v-form>
         </v-card-text>
-        <router-link :to="{path: '/register'}">Don't have an account? Create an account here!</router-link>
+        <router-link :to="{path: '/login'}">Already have an account? Login here!</router-link>
       </v-card>
     </v-flex>
   </v-layout>
@@ -39,6 +51,10 @@ export default {
     return {
       valid: false,
       e1: false,
+      username: '',
+      usernameRules: [
+        (v) => !!v || 'Username is required'
+      ],
       email: '',
       emailRules: [
         (v) => !!v || 'E-mail is required',
@@ -47,6 +63,11 @@ export default {
       password: '',
       passwordRules: [
         (v) => !!v || 'Password is required'
+      ],
+      confirmPassword: '',
+      confirmPasswordRules: [
+        (v) => !!v || 'Password is required',
+        (v) => v === this.password || 'Passwords must match!'
       ]
     }
   },
@@ -54,8 +75,8 @@ export default {
     ...Vuex.mapGetters(['error'])
   },
   methods: {
-    Login () {
-      this.$store.dispatch('Login', {'email': this.email, 'password': this.password}).then(() => {
+    Register () {
+      this.$store.dispatch('Register', {'username': this.username, 'email': this.email, 'password': this.password, 'confirm_password': this.confirmPassword}).then(() => {
         this.$router.push('/')
       })
     }

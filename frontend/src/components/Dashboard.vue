@@ -23,9 +23,9 @@
 
 <script>
 import Vuex from 'vuex'
-import axios from 'axios'
+// import axios from 'axios'
 export default {
-  name: 'hello',
+  name: 'dashboard',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
@@ -34,20 +34,6 @@ export default {
   },
   computed: {
     ...Vuex.mapGetters(['route'])
-  },
-  created () {
-    axios.get(`http://localhost:8000/api/measurements/`, {
-      'headers': {
-        'Authorization': 'JWT ' + localStorage.getItem('token')
-      }
-    })
-    .then(response => {
-      // JSON responses are automatically parsed.
-      this.measurements = response.data
-    })
-    .catch(e => {
-
-    })
   }
 }
 </script>

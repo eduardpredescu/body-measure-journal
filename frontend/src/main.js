@@ -14,8 +14,14 @@ sync(store, router)
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.getters.user) {
+    if (!store.getters.user && !store.getters.isLoggedIn) {
       next({path: '/login'})
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.requiresAnon)) {
+    if (store.getters.user || store.getters.isLoggedIn) {
+      next({path: '/'})
     } else {
       next()
     }
