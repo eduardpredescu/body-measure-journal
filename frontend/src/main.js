@@ -6,7 +6,7 @@ import router from './router'
 import {store} from './store'
 import {sync} from 'vuex-router-sync'
 import Vuetify from 'vuetify'
-import('../node_modules/vuetify/dist/vuetify.min.css')
+import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify)
 Vue.config.productionTip = false
